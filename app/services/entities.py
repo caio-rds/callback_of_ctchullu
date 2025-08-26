@@ -13,14 +13,14 @@ class EntitiesService:
         if consult := await repository.get_all_entities():
             for entity in consult:
                 entities.append(ResponseEntity(
-                    id=str(entity['_id']),
-                    name=entity['name'],
-                    type=entity['type'],
-                    first_appearance=entity['first_appearance'],
-                    habitat=entity['habitat'],
-                    description=entity['description'],
-                    associated_books=entity['associated_books'],
-                    titles=entity['titles'] if 'titles' in entity else None,
+                    id=str(entity.get('_id')),
+                    name=entity.get('name'),
+                    type=entity.get('type'),
+                    first_appearance=entity.get('first_appearance'),
+                    habitat=entity.get('habitat'),
+                    description=entity.get('description'),
+                    associated_books=entity.get('associated_books'),
+                    titles=entity.get('titles', None)
                 ))
         return entities
 
@@ -28,13 +28,13 @@ class EntitiesService:
     async def get_entity(_id: str) -> ResponseEntity | None:
         if consult := await repository.get_entity_by_id(ObjectId(_id)):
             return ResponseEntity(
-                id=str(consult['_id']),
-                name=consult['name'],
-                type=consult['type'],
-                first_appearance=consult['first_appearance'],
-                habitat=consult['habitat'],
-                description=consult['description'],
-                associated_books=consult['associated_books'],
-                titles=consult['titles'] if 'titles' in consult else None,
+                id=str(consult.get('_id')),
+                name=consult.get('name'),
+                type=consult.get('type'),
+                first_appearance=consult.get('first_appearance'),
+                habitat=consult.get('habitat'),
+                description=consult.get('description'),
+                associated_books=consult.get('associated_books'),
+                titles=consult.get('titles', None)
             )
         return None

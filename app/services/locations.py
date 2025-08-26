@@ -12,12 +12,12 @@ class LocationsService:
         if consult := await repository.get_all_locations():
             for location in consult:
                 locations.append(ResponseLocation(
-                    id=str(location['_id']),
-                    name=location['name'],
-                    type=location['type'],
-                    description=location['description'],
-                    associated_stories=location['associated_stories'],
-                    notable_places=location['notable_places'] if 'notable_places' in location else None,
+                    id=str(location.get('_id')),
+                    name=location.get('name'),
+                    type=location.get('type'),
+                    description=location.get('description'),
+                    associated_stories=location.get('associated_stories'),
+                    notable_places=location.get('notable_places'),
                 ))
         return locations
 
@@ -25,11 +25,11 @@ class LocationsService:
     async def get_location(_id: str) -> ResponseLocation | None:
         if consult := await repository.get_location_by_id(ObjectId(_id)):
             return ResponseLocation(
-                id=str(consult['_id']),
-                name=consult['name'],
-                type=consult['type'],
-                description=consult['description'],
-                associated_stories=consult['associated_stories'],
-                notable_places=consult['notable_places'] if 'notable_places' in consult else None,
+                id=str(consult.get('_id')),
+                name=consult.get('name'),
+                type=consult.get('type'),
+                description=consult.get('description'),
+                associated_stories=consult.get('associated_stories'),
+                notable_places=consult.get('notable_places'),
             )
         return None

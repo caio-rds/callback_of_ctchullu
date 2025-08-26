@@ -12,12 +12,12 @@ class BooksService:
         if consult := await repository.get_all_books():
             for book in consult:
                 books.append(ResponseBooks(
-                    id=str(book['_id']),
-                    title=book['title'],
-                    year=book['year'],
-                    type=book['type'],
-                    description=book['description'],
-                    notes=book['notes'],
+                    id=str(book.get('_id')),
+                    title=book.get('title'),
+                    year=book.get('year'),
+                    type=book.get('type'),
+                    description=book.get('description'),
+                    notes=book.get('notes'),
                 ))
         return books
 
@@ -25,11 +25,11 @@ class BooksService:
     async def get_book(_id: str) -> ResponseBooks | None:
         if consult := await repository.get_book_by_id(ObjectId(_id)):
             return ResponseBooks(
-                id=str(consult['_id']),
-                title=consult['title'],
-                year=consult['year'],
-                type=consult['type'],
-                description=consult['description'],
-                notes=consult['notes'],
+                id=str(consult.get('_id')),
+                title=consult.get('title'),
+                year=consult.get('year'),
+                type=consult.get('type'),
+                description=consult.get('description'),
+                notes=consult.get('notes'),
             )
         return None

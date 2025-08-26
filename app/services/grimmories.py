@@ -12,14 +12,14 @@ class GrimmoriesService:
         if consult := await repository.get_all_grimmories():
             for grimmory in consult:
                 grimmories.append(ResponseGrimmories(
-                    id=str(grimmory['_id']),
-                    name=grimmory['name'],
-                    author=grimmory['author'],
-                    first_appearance=grimmory['first_appearance'],
-                    language=grimmory['language'],
-                    description=grimmory['description'],
-                    status=grimmory['status'],
-                    associated_locations=grimmory['associated_locations'],
+                    id=str(grimmory.get('_id')),
+                    name=grimmory.get('name'),
+                    author=grimmory.get('author'),
+                    first_appearance=grimmory.get('first_appearance'),
+                    language=grimmory.get('language'),
+                    description=grimmory.get('description'),
+                    status=grimmory.get('status'),
+                    associated_locations=grimmory.get('associated_locations'),
                 ))
         return grimmories
 
@@ -27,13 +27,13 @@ class GrimmoriesService:
     async def get_grimmory(_id: str) -> ResponseGrimmories | None:
         if consult := await repository.get_grimmory_by_id(ObjectId(_id)):
             return ResponseGrimmories(
-                id=str(consult['_id']),
-                name=consult['name'],
-                author=consult['author'],
-                first_appearance=consult['first_appearance'],
-                language=consult['language'],
-                description=consult['description'],
-                status=consult['status'],
-                associated_locations=consult['associated_locations'],
+                id=str(consult.get('_id')),
+                name=consult.get('name'),
+                author=consult.get('author'),
+                first_appearance=consult.get('first_appearance'),
+                language=consult.get('language'),
+                description=consult.get('description'),
+                status=consult.get('status'),
+                associated_locations=consult.get('associated_locations'),
             )
         return None
