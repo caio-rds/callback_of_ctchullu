@@ -16,10 +16,10 @@ class EntitiesService:
                     id=str(entity.get('_id')),
                     name=entity.get('name'),
                     type=entity.get('type'),
-                    first_appearance=entity.get('first_appearance'),
+                    first_appearance=f"api/v1/books/{entity.get('first_appearance')}",
                     habitat=entity.get('habitat'),
                     description=entity.get('description'),
-                    associated_books=entity.get('associated_books'),
+                    associated_books=[f"api/v1/books/{book_id}" for book_id in entity.get('associated_books', [])],
                     titles=entity.get('titles', None)
                 ))
         return entities
@@ -31,10 +31,10 @@ class EntitiesService:
                 id=str(consult.get('_id')),
                 name=consult.get('name'),
                 type=consult.get('type'),
-                first_appearance=consult.get('first_appearance'),
+                first_appearance=f"api/v1/books/{consult.get('first_appearance')}",
                 habitat=consult.get('habitat'),
                 description=consult.get('description'),
-                associated_books=consult.get('associated_books'),
+                associated_books=[f"api/v1/books/{book_id}" for book_id in consult.get('associated_books', [])],
                 titles=consult.get('titles', None)
             )
         return None

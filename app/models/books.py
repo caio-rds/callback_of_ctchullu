@@ -7,3 +7,4 @@ class ResponseBooks(BaseModel):
     type: str
     description: str
     notes: str
+    author: str

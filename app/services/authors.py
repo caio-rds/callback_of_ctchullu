@@ -18,7 +18,7 @@ class AuthorsService:
                     death_year=author.get('death_year'),
                     nationality=author.get('nationality'),
                     description=author.get('description'),
-                    works=author.get('works', None)
+                    works=[f"ap1/v1/books/{work_id}" for work_id in author.get('works', [])]
                 ))
         return authors
 
@@ -32,6 +32,6 @@ class AuthorsService:
                 death_year=consult.get('death_year'),
                 nationality=consult.get('nationality'),
                 description=consult.get('description'),
-                works=consult.get('works', None)
+                works=[f"ap1/v1/books/{work_id}" for work_id in consult.get('works', [])]
             )
         return None

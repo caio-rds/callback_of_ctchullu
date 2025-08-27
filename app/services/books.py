@@ -18,6 +18,7 @@ class BooksService:
                     type=book.get('type'),
                     description=book.get('description'),
                     notes=book.get('notes'),
+                    author=f"api/v1/authors/{book.get('author_id')}"
                 ))
         return books
 
@@ -31,5 +32,6 @@ class BooksService:
                 type=consult.get('type'),
                 description=consult.get('description'),
                 notes=consult.get('notes'),
+                author=f"api/v1/authors/{consult.get('author_id')}"
             )
         return None
