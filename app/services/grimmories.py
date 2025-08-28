@@ -1,4 +1,5 @@
 from bson import ObjectId
+from bson.errors import InvalidId
 
 from app.models.grimmories import ResponseGrimmories
 from app.repositories.grimmories import GrimmoriesRepository
@@ -25,15 +26,22 @@ class GrimmoriesService:
 
     @staticmethod
     async def get_grimmory(_id: str) -> ResponseGrimmories | None:
-        if consult := await repository.get_grimmory_by_id(ObjectId(_id)):
-            return ResponseGrimmories(
-                id=str(consult.get('_id')),
-                name=consult.get('name'),
-                author=consult.get('author'),
-                first_appearance=consult.get('first_appearance'),
-                language=consult.get('language'),
-                description=consult.get('description'),
-                status=consult.get('status'),
-                associated_locations=consult.get('associated_locations'),
-            )
+        if not ObjectId.is_valid(_id):
+            return None
+
+        try:
+            object_id = ObjectId(_id)
+            if consult := await repository.get_grimmory_by_id(object_id):
+                return ResponseGrimmories(
+                    id=str(consult.get('_id')),
+                    name=consult.get('name'),
+                    author=consult.get('author'),
+                    first_appearance=consult.get('first_appearance'),
+                    language=consult.get('language'),
+                    description=consult.get('description'),
+                    status=consult.get('status'),
+                    associated_locations=consult.get('associated_locations'),
+                )
+        except InvalidId:
+            return None
         return None

@@ -1,4 +1,6 @@
 from bson import ObjectId
+from bson.errors import InvalidId
+from fastapi.encoders import jsonable_encoder
 
 from app.models.authors import ResponseAuthors
 from app.repositories.authors import AuthorsRepository
@@ -7,7 +9,7 @@ repository = AuthorsRepository()
 class AuthorsService:
 
     @staticmethod
-    async def get_authors() -> list[ResponseAuthors]:
+    async def get_authors() -> list[ResponseAuthors] | None:
         authors = []
         if consult := await repository.get_all_authors():
             for author in consult:
@@ -20,18 +22,25 @@ class AuthorsService:
                     description=author.get('description'),
                     works=[f"ap1/v1/books/{work_id}" for work_id in author.get('works', [])]
                 ))
-        return authors
+        return authors if authors else None
 
     @staticmethod
     async def get_author_by_id(author_id: str) -> ResponseAuthors | None:
-        if consult := await repository.get_author_by_id(ObjectId(author_id)):
-            return ResponseAuthors(
-                id=str(consult.get('_id')),
-                name=consult.get('name'),
-                birth_year=consult.get('birth_year'),
-                death_year=consult.get('death_year'),
-                nationality=consult.get('nationality'),
-                description=consult.get('description'),
-                works=[f"ap1/v1/books/{work_id}" for work_id in consult.get('works', [])]
-            )
+        if not ObjectId.is_valid(author_id):
+            return None
+
+        try:
+            object_id = ObjectId(author_id)
+            if consult := await repository.get_author_by_id(object_id):
+                return ResponseAuthors(
+                    id=str(consult.get('_id')),
+                    name=consult.get('name'),
+                    birth_year=consult.get('birth_year'),
+                    death_year=consult.get('death_year'),
+                    nationality=consult.get('nationality'),
+                    description=consult.get('description'),
+                    works=[f"ap1/v1/books/{work_id}" for work_id in consult.get('works', [])]
+                )
+        except InvalidId:
+            return None
         return None

@@ -1,4 +1,5 @@
 from bson import ObjectId
+from bson.errors import InvalidId
 
 from app.models.books import ResponseBooks
 from app.repositories.books import BooksRepository
@@ -24,14 +25,21 @@ class BooksService:
 
     @staticmethod
     async def get_book(_id: str) -> ResponseBooks | None:
-        if consult := await repository.get_book_by_id(ObjectId(_id)):
-            return ResponseBooks(
-                id=str(consult.get('_id')),
-                title=consult.get('title'),
-                year=consult.get('year'),
-                type=consult.get('type'),
-                description=consult.get('description'),
-                notes=consult.get('notes'),
-                author=f"api/v1/authors/{consult.get('author_id')}"
-            )
+        if not ObjectId.is_valid(_id):
+            return None
+
+        try:
+            object_id = ObjectId(_id)
+            if consult := await repository.get_book_by_id(object_id):
+                return ResponseBooks(
+                    id=str(consult.get('_id')),
+                    title=consult.get('title'),
+                    year=consult.get('year'),
+                    type=consult.get('type'),
+                    description=consult.get('description'),
+                    notes=consult.get('notes'),
+                    author=f"api/v1/authors/{consult.get('author_id')}"
+                )
+        except InvalidId:
+            return None
         return None
