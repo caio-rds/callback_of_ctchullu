@@ -1,0 +1,1 @@
+# Maybe implement custom exceptions here in the future
